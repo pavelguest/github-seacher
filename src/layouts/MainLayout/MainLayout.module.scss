@@ -1,0 +1,26 @@
+.mainLayout {
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.mainLayoutContent {
+  padding: 20px;
+}
+
+.mainLayoutFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  background-color: var(--dark);
+
+  gap: 20px;
+}
+
+.footer__item {
+  text-decoration: none;
+}

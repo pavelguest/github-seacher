@@ -1,0 +1,44 @@
+.mainPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 20px;
+}
+.inputContainer {
+  align-self: center;
+}
+.searchInput {
+  position: relative;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+.searchInput input[type="text"] {
+  width: 200px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.search-input .search-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.search-input .search-button i {
+  font-size: 16px;
+  color: #666666;
+}
+
+.search-input .search-button:hover i {
+  color: #333333;
+}
