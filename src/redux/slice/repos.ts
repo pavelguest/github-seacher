@@ -8,7 +8,7 @@ const initialState: IInitialState = {
     : "",
   pageInfo: null,
   page: 1,
-  perPage: 10,
+  perPage: 100,
   reposList: [],
   loading: false,
   errorMessage: "",
@@ -51,6 +51,10 @@ export const reposSlice = createSlice({
       state.loading = true;
     },
     [getRepos.fulfilled.type]: (state, { payload }) => {
+      state.pageInfo = {
+        ...payload.viewer.repositories.pageInfo,
+        totalRepos: payload.viewer.repositories.totalCount,
+      };
       state.reposList = payload.viewer.repositories.edges;
       state.loading = false;
     },

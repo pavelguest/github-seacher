@@ -9,20 +9,6 @@ interface IRepoList {
 }
 
 const RepoList: FC<IRepoList> = ({ repos, handleNavigateToRepoDetails }) => {
-  //   return (
-  //     <div
-  //       onClick={() =>
-  //         handleNavigateToRepoDetails(repo.node.owner.login, repo.node.name)
-  //       }
-  //       className={styles.repoItem}
-  //     >
-  //       <p className={styles.repoItemTitle}>{index + 1}</p>
-  //       <p className={styles.repoItemTitle}>{repo.node.name}</p>
-  //       <p className={styles.repoItemTitle}>{repo.node.stargazerCount}</p>
-  //       <p className={styles.repoItemTitle}>{repo.node.pushedAt}</p>
-  //       <p className={styles.repoItemTitle}>{repo.node.url}</p>
-  //     </div>
-  //   );
   return (
     <table className={styles.table}>
       <thead>

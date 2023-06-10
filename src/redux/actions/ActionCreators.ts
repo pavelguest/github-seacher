@@ -23,11 +23,11 @@ export const searchRepos = createAsyncThunk(
 
 export const getRepos = createAsyncThunk(
   "repos/fetchReposList",
-  async (count: number, thunkAPI) => {
+  async (props: ISearchReposParams, thunkAPI) => {
     try {
       const response = await client.query({
         query: GET_REPOSITORIES,
-        variables: { first: count },
+        variables: props,
       });
 
       return response.data;

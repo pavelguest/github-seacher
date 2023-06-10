@@ -9,6 +9,8 @@ import { SearchInput } from "../../components/SearchInput";
 import { actions } from "../../redux/slice/repos";
 import { PagePagination } from "../../components/PagePagination";
 import { ISearchParams } from "../../redux/types/reposTypes";
+import { paginate } from "../../utils/helpersFunc";
+import { Spinner } from "../../components/Spinner";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -18,37 +20,32 @@ const MainPage = () => {
       ? (localStorage.getItem("searchParams") as string)
       : ""
   );
-  const { query, page, perPage, reposList, errorMessage, pageInfo } =
+  const { query, page, perPage, reposList, errorMessage, pageInfo, loading } =
     useAppSelector((state) => state.repos);
 
   const getRepositories = () => {
     if (query) {
-      const params = Object.fromEntries([...searchParams]);
-      console.log(params);
-
-      params.type === "after"
-        ? dispatch(
-            searchRepos({
-              query: query,
-              first: perPage,
-              last: null,
-              after: params.element,
-              before: null,
-            })
-          )
-        : dispatch(
-            searchRepos({
-              query: query,
-              last: null,
-              first: perPage,
-              after: null,
-              before: params.element,
-            })
-          );
-      dispatch(actions.setPage(page));
+      dispatch(
+        searchRepos({
+          query: query,
+          first: perPage,
+          last: null,
+          after: pageInfo?.endCursor,
+          before: null,
+        })
+      );
     } else {
-      dispatch(getRepos(perPage));
+      dispatch(
+        getRepos({
+          query: query,
+          first: perPage,
+          last: null,
+          after: pageInfo?.endCursor,
+          before: null,
+        })
+      );
     }
+    dispatch(actions.setPage(page));
   };
 
   const handleChangeSearchParams = (props: ISearchParams) => {
@@ -67,39 +64,47 @@ const MainPage = () => {
   };
 
   const handleSearch = (value: string) => {
-    // setSearchInput(value);
     dispatch(actions.setQuery(value));
     dispatch(actions.setPage(1));
     localStorage.removeItem("searchParams");
     setSearchParams("");
   };
 
+  const pages = [];
+  for (let i = 1; i <= Math.ceil(reposList.length / 10); i += 1) {
+    pages.push(i);
+  }
+
   useEffect(() => {
     getRepositories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, page, searchParams]);
-
-  if (errorMessage) return <ErrorMessage errorMessage={errorMessage} />;
+  }, [query]);
 
   return (
     <div className={styles.mainPageContainer}>
       <div className={styles.inputContainer}>
         <SearchInput onSearch={handleSearch} value={query} />
       </div>
-      <div className={styles.repoContainer}>
-        {!!reposList.length && (
-          <RepoList
-            repos={reposList}
-            handleNavigateToRepoDetails={handleNavigateToRepoDetails}
-          />
-        )}
-      </div>
-      {!!pageInfo && (
-        <PagePagination
-          pageInfo={pageInfo}
-          currentPage={page}
-          handlePageChange={handlePageChange}
-        />
+      {!loading ? (
+        <div className={styles.repoContainer}>
+          {!errorMessage && <ErrorMessage errorMessage={errorMessage} />}
+          {!!reposList.length && (
+            <RepoList
+              repos={paginate(reposList, 10, page)}
+              handleNavigateToRepoDetails={handleNavigateToRepoDetails}
+            />
+          )}
+          {!!pageInfo && (
+            <PagePagination
+              pageInfo={pageInfo}
+              pages={pages}
+              currentPage={page}
+              handlePageChange={handlePageChange}
+            />
+          )}
+        </div>
+      ) : (
+        <Spinner />
       )}
     </div>
   );

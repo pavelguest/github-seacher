@@ -23,6 +23,7 @@ const RepoDetailsPage = () => {
   return (
     <div className={styles.repoContainer}>
       <BackButton />
+
       <div className={styles.itemsContainer}>
         <p className={styles.repoTitle}>{currentRepoDetails?.name}</p>
         <p className={styles.repoTitle}>
@@ -33,26 +34,28 @@ const RepoDetailsPage = () => {
           {dayjs(currentRepoDetails?.pushedAt).format("DD MM YYYY")}
         </p>
       </div>
-      <div className={styles.userContainer}>
+      <div className={styles.itemsContainer}>
         <img
           className={styles.userImg}
           src={currentRepoDetails?.owner.avatarUrl}
           alt="user logo"
         />
-        <h2>{currentRepoDetails?.owner.login}</h2>
-        <a
-          className={styles.userLink}
-          href={currentRepoDetails?.owner.url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <h3>{currentRepoDetails?.owner.url}</h3>
-        </a>
+        <div>
+          <h2>{currentRepoDetails?.owner.login}</h2>
+          <a
+            className={styles.userLink}
+            href={currentRepoDetails?.owner.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <h3>{currentRepoDetails?.owner.url}</h3>
+          </a>
+        </div>
       </div>
       {!!currentRepoDetails?.languages.edges.length && (
         <div className={styles.itemsContainer}>
-          {currentRepoDetails.languages.edges.map((lang) => (
-            <div key={lang.node.id}>
+          {currentRepoDetails.languages.edges.map((lang, index) => (
+            <div key={index}>
               <p>{lang.node.name}</p>
             </div>
           ))}

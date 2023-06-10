@@ -4,24 +4,22 @@ import styles from "./PagePagination.module.scss";
 
 interface IPagePagination {
   pageInfo: IPageInfo;
+  pages: number[];
   currentPage: number;
   handlePageChange: (props: ISearchParams) => void;
 }
 
 const PagePagination: FC<IPagePagination> = ({
   pageInfo,
+  pages,
   currentPage,
   handlePageChange,
 }) => {
   const { totalRepos, hasNextPage, hasPreviousPage, endCursor, startCursor } =
     pageInfo;
 
-  const perPage = 10;
-  const totalItems = totalRepos;
-  const totalPages = Math.ceil(totalItems / perPage);
   const startPage = 1;
-  const endPage = totalPages;
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const endPage = pages.length;
 
   return (
     <div>
@@ -33,7 +31,7 @@ const PagePagination: FC<IPagePagination> = ({
         >
           <button
             className={styles.pageLink}
-            disabled={!hasPreviousPage}
+            disabled={currentPage === startPage}
             onClick={() =>
               handlePageChange({
                 page: currentPage - 1,
@@ -46,7 +44,7 @@ const PagePagination: FC<IPagePagination> = ({
           </button>
         </li>
         {pages.map((page) => {
-          if (page < startPage + 2 || page > endPage - 2) {
+          if (page < startPage || page > endPage - 1) {
             return null;
           }
 
@@ -86,7 +84,7 @@ const PagePagination: FC<IPagePagination> = ({
         >
           <button
             className={styles.pageLink}
-            disabled={!hasNextPage}
+            disabled={currentPage === endPage}
             onClick={() =>
               handlePageChange({
                 page: currentPage + 1,

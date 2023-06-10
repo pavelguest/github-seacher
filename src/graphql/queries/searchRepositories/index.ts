@@ -6,6 +6,7 @@ export const SEARCH_REPOSITORIES = gql`
     $first: Int
     $last: Int
     $after: String
+    $before: String
   ) {
     search(
       query: $query
@@ -13,6 +14,7 @@ export const SEARCH_REPOSITORIES = gql`
       first: $first
       last: $last
       after: $after
+      before: $before
     ) {
       repositoryCount
       pageInfo {
@@ -21,7 +23,6 @@ export const SEARCH_REPOSITORIES = gql`
         endCursor
         startCursor
       }
-      repositoryCount
       edges {
         node {
           ... on Repository {
